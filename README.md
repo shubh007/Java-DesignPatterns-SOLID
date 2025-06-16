@@ -71,10 +71,47 @@ Current implementations:
    - Serialization handled automatically
    - Protection against reflection attacks
 
-#### Factory Pattern (Coming Soon)
-- Abstract Factory
-- Factory Method
-- Simple Factory
+#### Factory Pattern
+The Factory pattern provides an interface for creating objects but lets subclasses decide which class to instantiate.
+
+Current implementations:
+
+1. [Abstract Factory](app/src/main/java/org/codeposito/creational/factory/abstrct/)
+   - Provides an interface for creating families of related objects
+   - Encapsulates object creation
+   - Ensures compatibility between created objects
+   - Implementation includes:
+     - Abstract Products (Button, Checkbox)
+     - Concrete Products (LightButton, DarkButton, LightCheckbox, DarkCheckbox)
+     - Abstract Factory (GUIFactory)
+     - Concrete Factories (LightThemeFactory, DarkThemeFactory)
+     - Client (Application)
+
+2. [Simple Factory](app/src/main/java/org/codeposito/creational/factory/simple/)
+   - Creates objects without exposing creation logic
+   - Centralizes object creation
+   - Simplifies client code
+   - Implementation includes:
+     - Product Interface
+     - Concrete Products (ConcreteProductA, ConcreteProductB)
+     - Simple Factory with type-safe enum
+     - Client with error handling
+
+3. [Regular Factory](app/src/main/java/org/codeposito/creational/factory/regular/)
+   - Defines an interface for creating objects
+   - Lets subclasses decide which class to instantiate
+   - Promotes loose coupling
+   - Implementation includes:
+     - Abstract Product (Vehicle)
+     - Concrete Products (Car, Bike)
+     - Abstract Factory (VehicleFactory)
+     - Concrete Factories (CarFactory, BikeFactory)
+     - Client (FactoryMethodClient)
+
+4. Factory Method (Coming Soon)
+   - Defines an interface for creating objects
+   - Lets subclasses decide which class to instantiate
+   - Promotes loose coupling
 
 #### Builder Pattern (Coming Soon)
 - Classic Builder
