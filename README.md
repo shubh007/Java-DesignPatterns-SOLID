@@ -437,6 +437,89 @@ Benefits:
 - **Better Design**: Follows composition over inheritance principle
 - **Maintainability**: Changes are isolated to specific components
 
+#### Composite Pattern
+The Composite pattern composes objects into tree structures to represent part-whole hierarchies. It allows clients to treat individual objects and compositions of objects uniformly.
+
+Current implementations:
+
+1. [File System Composite](app/src/main/java/org/codeposito/structural/composite/)
+   - Demonstrates a hierarchical file system structure
+   - Shows how to treat files and directories uniformly
+   - Implementation includes:
+     - **FileSystemComponent** ([FileSystemComponent.java](app/src/main/java/org/codeposito/structural/composite/FileSystemComponent.java)) - The "Component" abstract class
+       - Defines common interface for both leaf and composite objects
+       - Provides abstract methods for display, size calculation, and search
+       - Includes default implementations that throw exceptions for leaf operations
+     - **File** ([File.java](app/src/main/java/org/codeposito/structural/composite/File.java)) - The "Leaf" class
+       - Represents individual files in the file system
+       - Cannot contain other components
+       - Implements file-specific operations (extension, content)
+       - Provides size formatting and content management
+     - **Directory** ([Directory.java](app/src/main/java/org/codeposito/structural/composite/Directory.java)) - The "Composite" class
+       - Represents directories that can contain other components
+       - Manages a collection of child components
+       - Implements recursive operations (size calculation, search)
+       - Provides statistics (file count, directory count)
+     - **FileSystemManager** ([FileSystemManager.java](app/src/main/java/org/codeposito/structural/composite/FileSystemManager.java)) - Utility class
+       - Creates sample file system structures for demonstration
+       - Provides high-level operations (search, statistics, largest file)
+       - Includes size formatting utilities
+     - **CompositeClient** ([CompositeClient.java](app/src/main/java/org/codeposito/structural/composite/CompositeClient.java)) - Demo client
+       - Comprehensive demonstration of the composite pattern
+       - Shows uniform treatment of files and directories
+       - Demonstrates dynamic structure modification
+     - **Comprehensive test coverage** ([CompositeTest.java](app/src/test/java/org/codeposito/structural/composite/CompositeTest.java))
+       - Tests all composite components and their interactions
+       - Validates leaf vs composite behavior
+       - Ensures proper recursive operations
+
+Key Features:
+- **Uniform Interface**: Files and directories share the same interface
+- **Recursive Structure**: Directories can contain other directories
+- **Transparent Composition**: Clients don't need to know if they're working with files or directories
+- **Dynamic Structure**: Components can be added/removed at runtime
+- **Recursive Operations**: Size calculation, search, and display work recursively
+- **Statistics**: Built-in counting and analysis capabilities
+- **Error Handling**: Proper exception handling for invalid operations
+- **Comprehensive Testing**: Full test coverage for all composite scenarios
+
+Usage Examples:
+```java
+// Create file system structure
+Directory root = new Directory("root", "rwxr-xr-x");
+Directory documents = new Directory("documents", "rwxr-xr-x");
+File readme = new File("README.md", 1024, "rw-r--r--", "md", "# Documentation");
+
+// Build hierarchy
+root.add(documents);
+documents.add(readme);
+
+// Treat files and directories uniformly
+FileSystemComponent[] components = {root, documents, readme};
+for (FileSystemComponent component : components) {
+    component.display(""); // Same interface for all
+    System.out.println("Size: " + component.getTotalSize()); // Recursive for directories
+}
+
+// Search across entire structure
+List<FileSystemComponent> results = root.search("README");
+results.forEach(result -> System.out.println("Found: " + result.getName()));
+
+// Dynamic modification
+File newFile = new File("new.txt", 512, "rw-r--r--", "txt", "New content");
+documents.add(newFile);
+documents.remove(readme);
+```
+
+Benefits:
+- **Simplified Client Code**: Clients treat individual and composite objects uniformly
+- **Easy Extension**: New component types can be added easily
+- **Flexible Structure**: Tree structures can be built dynamically
+- **Recursive Operations**: Natural support for tree traversal operations
+- **Type Safety**: Compile-time type checking for component operations
+- **Maintainability**: Changes to structure don't affect client code
+- **Real-world Applicability**: Perfect for file systems, UI components, and organizational structures
+
 ### Behavioral Patterns (Coming Soon)
 - Chain of Responsibility
 - Command Pattern
@@ -468,7 +551,8 @@ app/
 │   │               │   └── prototype/
 │   │               ├── structural/
 │   │               │   ├── adapter/
-│   │               │   └── bridge/
+│   │               │   ├── bridge/
+│   │               │   └── composite/
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
 │       └── java/
