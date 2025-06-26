@@ -50,6 +50,9 @@ open app/build/reports/tests/test/index.html
 # Run decorator pattern demo
 ./gradlew run --args="decorator"
 
+# Run facade pattern demo
+./gradlew run --args="facade"
+
 # Run other pattern demos (when implemented)
 ./gradlew run --args="singleton"
 ./gradlew run --args="factory"
@@ -638,6 +641,122 @@ Benefits:
 - **Maintainability**: Changes to decorators don't affect other components
 - **Real-world Applicability**: Perfect for UI components, I/O streams, and service layers
 
+#### Facade Pattern
+The Facade pattern provides a simplified interface to a complex subsystem of classes, making it easier to use and understand. It encapsulates the complexity of multiple subsystems and provides a unified interface for common operations.
+
+Current implementations:
+
+1. [Home Theater Facade](app/src/main/java/org/codeposito/structural/facade/)
+   - Demonstrates a home theater system with multiple complex components
+   - Shows how a facade can simplify the interaction with multiple subsystems
+   - Implementation includes:
+     - **HomeTheaterFacade** ([HomeTheaterFacade.java](app/src/main/java/org/codeposito/structural/facade/HomeTheaterFacade.java)) - The "Facade" class
+       - Provides simplified interface to the entire home theater system
+       - Encapsulates complexity of multiple subsystem components
+       - Orchestrates operations across all components
+       - Offers high-level operations: watchMovie(), listenToRadio(), listenToCd()
+     - **Amplifier** ([Amplifier.java](app/src/main/java/org/codeposito/structural/facade/Amplifier.java)) - Subsystem component
+       - Handles audio amplification and routing
+       - Manages volume, sound modes, and input sources
+       - Supports DVD, CD, and Tuner inputs
+       - Provides surround and stereo sound modes
+     - **Tuner** ([Tuner.java](app/src/main/java/org/codeposito/structural/facade/Tuner.java)) - Subsystem component
+       - Handles radio tuning functionality
+       - Manages frequency selection and on/off state
+       - Provides radio listening capabilities
+     - **DvdPlayer** ([DvdPlayer.java](app/src/main/java/org/codeposito/structural/facade/DvdPlayer.java)) - Subsystem component
+       - Handles DVD playback functionality
+       - Manages movie playback, stop, and eject operations
+       - Tracks current playing movie
+     - **CdPlayer** ([CdPlayer.java](app/src/main/java/org/codeposito/structural/facade/CdPlayer.java)) - Subsystem component
+       - Handles CD playback functionality
+       - Manages CD playback and eject operations
+       - Tracks current playing CD
+     - **Projector** ([Projector.java](app/src/main/java/org/codeposito/structural/facade/Projector.java)) - Subsystem component
+       - Handles video projection functionality
+       - Supports widescreen and TV modes
+       - Manages on/off state and display modes
+     - **TheaterLights** ([TheaterLights.java](app/src/main/java/org/codeposito/structural/facade/TheaterLights.java)) - Subsystem component
+       - Handles theater lighting functionality
+       - Provides dimming capabilities for ambiance
+       - Manages on/off state and brightness levels
+     - **Screen** ([Screen.java](app/src/main/java/org/codeposito/structural/facade/Screen.java)) - Subsystem component
+       - Handles projection screen functionality
+       - Manages screen up/down positions
+       - Tracks current screen state
+     - **PopcornPopper** ([PopcornPopper.java](app/src/main/java/org/codeposito/structural/facade/PopcornPopper.java)) - Subsystem component
+       - Handles popcorn popping functionality
+       - Provides movie theater ambiance
+       - Manages on/off state and popping operations
+     - **FacadeClient** ([FacadeClient.java](app/src/main/java/org/codeposito/structural/facade/FacadeClient.java)) - Demo client
+       - Comprehensive demonstration of the facade pattern
+       - Shows simplified interface usage for complex operations
+       - Demonstrates movie watching, radio listening, and CD listening
+       - Includes system status monitoring
+     - **Comprehensive test coverage** ([FacadeTest.java](app/src/test/java/org/codeposito/structural/facade/FacadeTest.java))
+       - Tests all subsystem components individually
+       - Validates facade orchestration and integration
+       - Ensures proper component state management
+       - Tests complete workflows and error scenarios
+
+Key Features:
+- **Simplified Interface**: Complex subsystem operations reduced to simple method calls
+- **Encapsulation**: Subsystem complexity hidden from clients
+- **Orchestration**: Facade coordinates multiple components for common operations
+- **High-Level Operations**: watchMovie(), listenToRadio(), listenToCd() methods
+- **State Management**: Automatic component state tracking and management
+- **Error Handling**: Robust error handling across all subsystems
+- **Comprehensive Testing**: Full test coverage for all components and workflows
+- **Real-world Example**: Practical home theater system with multiple components
+
+Usage Examples:
+```java
+// Create the facade
+HomeTheaterFacade homeTheater = new HomeTheaterFacade();
+
+// Watch a movie (orchestrates 8 different components)
+homeTheater.watchMovie("Raiders of the Lost Ark");
+// This single call handles:
+// - Popcorn popper on and pop
+// - Lights dim to 10%
+// - Screen down
+// - Projector on with widescreen mode
+// - Amplifier on with DVD input and surround sound
+// - DVD player on and play movie
+
+// Listen to radio (orchestrates 3 components)
+homeTheater.listenToRadio(95.5);
+// This single call handles:
+// - Lights on
+// - Amplifier on with tuner input
+// - Tuner on and set frequency
+
+// Listen to CD (orchestrates 3 components)
+homeTheater.listenToCd("Greatest Hits Album");
+// This single call handles:
+// - Lights on
+// - Amplifier on with CD input and stereo sound
+// - CD player on and play album
+
+// End operations (clean shutdown)
+homeTheater.endMovie();    // Shuts down all movie-related components
+homeTheater.endRadio();    // Shuts down radio-related components
+homeTheater.endCd();       // Shuts down CD-related components
+
+// Get system status
+homeTheater.getSystemStatus(); // Shows status of all components
+```
+
+Benefits:
+- **Simplified Client Code**: Clients interact with one simple interface instead of multiple complex subsystems
+- **Reduced Coupling**: Clients don't need to know about subsystem internals
+- **Easier Maintenance**: Changes to subsystems don't affect client code
+- **Better Encapsulation**: Subsystem complexity is hidden from clients
+- **Improved Usability**: High-level operations are intuitive and easy to use
+- **Centralized Control**: All subsystem coordination happens in one place
+- **Error Isolation**: Errors in subsystems are contained and handled gracefully
+- **Real-world Applicability**: Perfect for complex systems like home automation, banking systems, and enterprise applications
+
 ### Behavioral Patterns (Coming Soon)
 - Chain of Responsibility
 - Command Pattern
@@ -671,7 +790,8 @@ app/
 │   │               │   ├── adapter/
 │   │               │   ├── bridge/
 │   │               │   ├── composite/
-│   │               │   └── decorator/
+│   │               │   ├── decorator/
+│   │               │   └── facade/
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
 │       └── java/
@@ -685,7 +805,8 @@ app/
 │                   │   ├── adapter/
 │                   │   ├── bridge/
 │                   │   ├── composite/
-│                   │   └── decorator/
+│                   │   ├── decorator/
+│                   │   └── facade/
 │                   └── behavioral/     (Coming Soon)
 └── build.gradle.kts
 ```
