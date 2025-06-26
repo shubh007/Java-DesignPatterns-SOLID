@@ -44,6 +44,12 @@ open app/build/reports/tests/test/index.html
 # Run bridge pattern demo
 ./gradlew run --args="bridge"
 
+# Run composite pattern demo
+./gradlew run --args="composite"
+
+# Run decorator pattern demo
+./gradlew run --args="decorator"
+
 # Run other pattern demos (when implemented)
 ./gradlew run --args="singleton"
 ./gradlew run --args="factory"
@@ -520,6 +526,118 @@ Benefits:
 - **Maintainability**: Changes to structure don't affect client code
 - **Real-world Applicability**: Perfect for file systems, UI components, and organizational structures
 
+#### Decorator Pattern
+The Decorator pattern allows behavior to be added to individual objects dynamically without affecting the behavior of other objects of the same class. It provides a flexible alternative to subclassing for extending functionality.
+
+Current implementations:
+
+1. [Coffee Shop Decorator](app/src/main/java/org/codeposito/structural/decorator/)
+   - Demonstrates a coffee shop where different add-ons can be combined with base coffee types
+   - Shows how decorators can be stacked to create complex combinations
+   - Implementation includes:
+     - **Coffee** ([Coffee.java](app/src/main/java/org/codeposito/structural/decorator/Coffee.java)) - The "Component" interface
+       - Defines the common contract for all coffee types and decorators
+       - Provides methods for cost, description, and preparation time
+       - Represents the base abstraction that can be decorated
+     - **SimpleCoffee** ([SimpleCoffee.java](app/src/main/java/org/codeposito/structural/decorator/SimpleCoffee.java)) - The "ConcreteComponent" class
+       - Represents basic coffee types without any add-ons
+       - Implements the Coffee interface with base functionality
+       - Serves as the foundation for all decorated coffees
+     - **CoffeeDecorator** ([CoffeeDecorator.java](app/src/main/java/org/codeposito/structural/decorator/CoffeeDecorator.java)) - The "Decorator" abstract class
+       - Implements the Coffee interface and holds a reference to a Coffee object
+       - Provides base functionality that delegates to the wrapped coffee
+       - Serves as the foundation for all concrete decorators
+     - **MilkDecorator** ([MilkDecorator.java](app/src/main/java/org/codeposito/structural/decorator/MilkDecorator.java)) - Concrete decorator
+       - Adds milk functionality to any coffee
+       - Increases cost by $0.50 and preparation time by 1 minute
+       - Appends " + Milk" to the description
+     - **SugarDecorator** ([SugarDecorator.java](app/src/main/java/org/codeposito/structural/decorator/SugarDecorator.java)) - Concrete decorator
+       - Adds sugar functionality to any coffee
+       - Increases cost by $0.25 and preparation time by 1 minute
+       - Appends " + Sugar" to the description
+     - **WhippedCreamDecorator** ([WhippedCreamDecorator.java](app/src/main/java/org/codeposito/structural/decorator/WhippedCreamDecorator.java)) - Concrete decorator
+       - Adds whipped cream functionality to any coffee
+       - Increases cost by $0.75 and preparation time by 2 minutes
+       - Appends " + Whipped Cream" to the description
+     - **CaramelDecorator** ([CaramelDecorator.java](app/src/main/java/org/codeposito/structural/decorator/CaramelDecorator.java)) - Concrete decorator
+       - Adds caramel functionality to any coffee
+       - Increases cost by $1.00 and preparation time by 2 minutes
+       - Appends " + Caramel" to the description
+     - **CoffeeShop** ([CoffeeShop.java](app/src/main/java/org/codeposito/structural/decorator/CoffeeShop.java)) - Utility class
+       - Provides predefined coffee types (Espresso, Americano, Cappuccino, Latte, Mocha)
+       - Offers convenience methods for adding decorators
+       - Includes a customize method for complex combinations
+       - Provides formatted output for coffee details
+     - **DecoratorClient** ([DecoratorClient.java](app/src/main/java/org/codeposito/structural/decorator/DecoratorClient.java)) - Demo client
+       - Comprehensive demonstration of the decorator pattern
+       - Shows single and multiple decorator combinations
+       - Demonstrates dynamic decorator chaining
+       - Analyzes cost and preparation time calculations
+     - **Comprehensive test coverage** ([DecoratorTest.java](app/src/test/java/org/codeposito/structural/decorator/DecoratorTest.java))
+       - Tests all decorators and their combinations
+       - Validates cost and preparation time calculations
+       - Ensures decorator transparency and flexibility
+       - Tests the customize method and decorator chaining
+
+Key Features:
+- **Dynamic Composition**: Decorators can be added/removed at runtime
+- **Transparent Interface**: Decorated objects implement the same interface as base objects
+- **Flexible Combinations**: Decorators can be combined in any order
+- **Single Responsibility**: Each decorator has one specific responsibility
+- **Open/Closed Principle**: New decorators can be added without modifying existing code
+- **Cost Calculation**: Automatic cost aggregation through decorator chain
+- **Preparation Time**: Automatic time calculation through decorator chain
+- **Comprehensive Testing**: Full test coverage for all decorator scenarios
+
+Usage Examples:
+```java
+// Create basic coffee
+Coffee espresso = CoffeeShop.ESPRESSO;
+
+// Add single decorator
+Coffee withMilk = CoffeeShop.withMilk(espresso);
+Coffee withSugar = CoffeeShop.withSugar(espresso);
+
+// Add multiple decorators
+Coffee complexCoffee = CoffeeShop.withMilk(
+    CoffeeShop.withSugar(
+        CoffeeShop.withWhippedCream(
+            CoffeeShop.withCaramel(CoffeeShop.MOCHA)
+        )
+    )
+);
+
+// Use the customize method
+Coffee customized = CoffeeShop.customize(
+    CoffeeShop.LATTE, 
+    true,   // add milk
+    true,   // add sugar
+    false,  // no whipped cream
+    true    // add caramel
+);
+
+// Dynamic decorator chaining
+Coffee coffee = CoffeeShop.AMERICANO;
+coffee = CoffeeShop.withMilk(coffee);      // Americano + Milk
+coffee = CoffeeShop.withSugar(coffee);     // Americano + Milk + Sugar
+coffee = CoffeeShop.withCaramel(coffee);   // Americano + Milk + Sugar + Caramel
+
+// All decorated objects work the same way
+System.out.println(coffee.getDescription()); // "Americano + Milk + Sugar + Caramel"
+System.out.println(coffee.getCost());        // 4.75 (3.00 + 0.50 + 0.25 + 1.00)
+System.out.println(coffee.getPreparationTime()); // 8 (4 + 1 + 1 + 2)
+```
+
+Benefits:
+- **Open/Closed Principle**: New functionality can be added without modifying existing code
+- **Single Responsibility**: Each decorator has one specific responsibility
+- **Flexibility**: Decorators can be combined in any order and quantity
+- **Transparency**: Clients treat decorated objects the same as base objects
+- **Dynamic Composition**: Decorators can be added/removed at runtime
+- **Avoids Inheritance Explosion**: No need for multiple subclasses for different combinations
+- **Maintainability**: Changes to decorators don't affect other components
+- **Real-world Applicability**: Perfect for UI components, I/O streams, and service layers
+
 ### Behavioral Patterns (Coming Soon)
 - Chain of Responsibility
 - Command Pattern
@@ -552,7 +670,8 @@ app/
 │   │               ├── structural/
 │   │               │   ├── adapter/
 │   │               │   ├── bridge/
-│   │               │   └── composite/
+│   │               │   ├── composite/
+│   │               │   └── decorator/
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
 │       └── java/
@@ -564,7 +683,9 @@ app/
 │                   │   └── prototype/
 │                   ├── structural/
 │                   │   ├── adapter/
-│                   │   └── bridge/
+│                   │   ├── bridge/
+│                   │   ├── composite/
+│                   │   └── decorator/
 │                   └── behavioral/     (Coming Soon)
 └── build.gradle.kts
 ```
