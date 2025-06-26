@@ -757,6 +757,103 @@ Benefits:
 - **Error Isolation**: Errors in subsystems are contained and handled gracefully
 - **Real-world Applicability**: Perfect for complex systems like home automation, banking systems, and enterprise applications
 
+#### Proxy Pattern
+The Proxy pattern provides a surrogate or placeholder for another object to control access to it. It allows you to add a level of control over access to the real object, such as lazy loading, access control, or logging.
+
+Current implementations:
+
+1. [Image Loading Proxy](app/src/main/java/org/codeposito/structural/proxy/)
+   - Demonstrates lazy loading of expensive image resources
+   - Shows how to control access to large image files
+   - Implementation includes:
+     - **Image** ([Image.java](app/src/main/java/org/codeposito/structural/proxy/Image.java)) - The "Subject" interface
+       - Defines the common interface for both RealImage and ImageProxy
+       - Provides methods for display, filename, size, format, and loading status
+       - Represents the abstraction that both proxy and real subject implement
+     - **RealImage** ([RealImage.java](app/src/main/java/org/codeposito/structural/proxy/RealImage.java)) - The "RealSubject" class
+       - Represents the actual image that is expensive to load and display
+       - Simulates expensive disk loading operations with delays
+       - Contains image metadata (filename, size, format) and loading state
+       - Provides size formatting utilities for human-readable output
+     - **ImageProxy** ([ImageProxy.java](app/src/main/java/org/codeposito/structural/proxy/ImageProxy.java)) - The "Proxy" class
+       - Controls access to the RealImage and provides lazy loading
+       - Implements the same interface as RealImage
+       - Creates RealImage only when first accessed (lazy initialization)
+       - Delegates all operations to the real image once created
+     - **ImageGallery** ([ImageGallery.java](app/src/main/java/org/codeposito/structural/proxy/ImageGallery.java)) - The "Client" class
+       - Demonstrates the proxy pattern in a real-world scenario
+       - Manages a collection of images using proxies for efficient memory usage
+       - Provides gallery information without loading images
+       - Shows memory usage statistics and efficiency metrics
+       - Includes methods for displaying specific images or all images
+     - **ProxyClient** ([ProxyClient.java](app/src/main/java/org/codeposito/structural/proxy/ProxyClient.java)) - Demo client
+       - Comprehensive demonstration of the proxy pattern
+       - Shows basic proxy functionality with lazy loading
+       - Demonstrates real-world scenario with image gallery
+       - Compares memory efficiency with and without proxies
+       - Analyzes the benefits of lazy loading and memory management
+     - **Comprehensive test coverage** ([ProxyTest.java](app/src/test/java/org/codeposito/structural/proxy/ProxyTest.java))
+       - Tests all proxy components and their interactions
+       - Validates lazy loading behavior and delegation
+       - Ensures proper interface compatibility
+       - Tests gallery functionality and memory management
+       - Verifies multiple proxies work independently
+
+Key Features:
+- **Lazy Loading**: Images are loaded only when first accessed
+- **Memory Efficiency**: Unused images don't consume memory
+- **Transparent Interface**: Proxy and RealImage implement the same interface
+- **Access Control**: Proxy controls when and how the real object is accessed
+- **Performance Optimization**: Reduces initial loading time and memory usage
+- **Statistics Tracking**: Real-time monitoring of memory usage and efficiency
+- **Comprehensive Testing**: Full test coverage for all proxy scenarios
+- **Real-world Example**: Practical image gallery with efficient resource management
+
+Usage Examples:
+```java
+// Create a proxy for a large image
+Image imageProxy = new ImageProxy("vacation_photo.jpg", 2048576, "JPEG");
+
+// Proxy is created instantly (no loading)
+System.out.println("Proxy created for: " + imageProxy.getFilename());
+System.out.println("Is loaded: " + imageProxy.isLoaded()); // false
+
+// First display triggers loading
+imageProxy.display(); // This will load the image from disk
+System.out.println("Is loaded: " + imageProxy.isLoaded()); // true
+
+// Subsequent displays are instant
+imageProxy.display(); // No loading, instant display
+
+// Use in a gallery for memory efficiency
+ImageGallery gallery = new ImageGallery("Nature Photography");
+gallery.addImage("mountain_landscape.jpg", 1536000, "JPEG");
+gallery.addImage("forest_path.png", 2048000, "PNG");
+
+// Show gallery info without loading images
+gallery.showGalleryInfo();
+
+// Load only specific images
+gallery.displayImage("mountain_landscape.jpg"); // Only this image is loaded
+
+// Check memory efficiency
+gallery.showMemoryUsage();
+// Output shows:
+// - Total images: 2
+// - Loaded images: 1
+// - Memory saved: 1.5 MB
+// - Memory efficiency: 42.9%
+```
+
+Benefits:
+- **Memory Efficiency**: Reduces memory usage by loading resources only when needed
+- **Performance Improvement**: Faster application startup and reduced initial load time
+- **Resource Management**: Better control over expensive resource allocation
+- **Access Control**: Can add security, logging, or caching without modifying real objects
+- **Scalability**: Efficiently handles large numbers of potentially expensive objects
+- **Transparency**: Clients work with the same interface regardless of proxy or real object
+- **Real-world Applicability**: Perfect for image galleries, document viewers, database connections, and any application with expensive resources
+
 #### Flyweight Pattern
 The Flyweight pattern reduces memory usage by sharing common parts of state between multiple objects instead of keeping all of the data in each object. It's useful when you need to create a large number of similar objects that share common state.
 
@@ -876,7 +973,8 @@ app/
 │   │               │   ├── composite/
 │   │               │   ├── decorator/
 │   │               │   ├── facade/
-│   │               │   └── flyweight/
+│   │               │   ├── flyweight/
+│   │               │   └── proxy/
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
 │       └── java/
@@ -891,7 +989,9 @@ app/
 │                   │   ├── bridge/
 │                   │   ├── composite/
 │                   │   ├── decorator/
-│                   │   └── facade/
+│                   │   ├── facade/
+│                   │   ├── flyweight/
+│                   │   └── proxy/
 │                   └── behavioral/     (Coming Soon)
 └── build.gradle.kts
 ```
