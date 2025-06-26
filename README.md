@@ -41,6 +41,9 @@ open app/build/reports/tests/test/index.html
 # Run adapter pattern demo
 ./gradlew run --args="adapter"
 
+# Run bridge pattern demo
+./gradlew run --args="bridge"
+
 # Run other pattern demos (when implemented)
 ./gradlew run --args="singleton"
 ./gradlew run --args="factory"
@@ -347,6 +350,93 @@ Benefits:
 - **Gradual Migration**: Enables incremental system modernization
 - **Code Reuse**: Leverages existing functionality without rewriting
 
+#### Bridge Pattern
+The Bridge pattern decouples an abstraction from its implementation so that both can vary independently. It allows you to separate the interface from the implementation and lets you change the implementation without affecting the client code.
+
+Current implementations:
+
+1. [Drawing System Bridge](app/src/main/java/org/codeposito/structural/bridge/)
+   - Demonstrates decoupling shapes from rendering engines
+   - Shows how the same shapes can be rendered using different APIs
+   - Implementation includes:
+     - **DrawingAPI** ([DrawingAPI.java](app/src/main/java/org/codeposito/structural/bridge/DrawingAPI.java)) - The "Implementation" interface
+       - Defines drawing operations (drawCircle, drawRectangle, drawLine)
+       - Provides API identification method
+       - Represents the implementation side of the bridge
+     - **OpenGLDrawingAPI** ([OpenGLDrawingAPI.java](app/src/main/java/org/codeposito/structural/bridge/OpenGLDrawingAPI.java)) - Concrete implementation
+       - Hardware-accelerated rendering using OpenGL
+       - High-performance graphics processing
+       - Real-time rendering capabilities
+     - **SVGDrawingAPI** ([SVGDrawingAPI.java](app/src/main/java/org/codeposito/structural/bridge/SVGDrawingAPI.java)) - Concrete implementation
+       - Vector-based graphics using SVG
+       - Scalable without quality loss
+       - XML output generation
+     - **Shape** ([Shape.java](app/src/main/java/org/codeposito/structural/bridge/Shape.java)) - The "Abstraction" class
+       - Abstract base class for all shapes
+       - Holds reference to DrawingAPI implementation
+       - Provides common shape functionality
+     - **Circle** ([Circle.java](app/src/main/java/org/codeposito/structural/bridge/Circle.java)) - Concrete abstraction
+       - Represents a circle shape with center coordinates and radius
+       - Delegates drawing to the DrawingAPI implementation
+     - **Rectangle** ([Rectangle.java](app/src/main/java/org/codeposito/structural/bridge/Rectangle.java)) - Concrete abstraction
+       - Represents a rectangle shape with position and dimensions
+       - Delegates drawing to the DrawingAPI implementation
+     - **Line** ([Line.java](app/src/main/java/org/codeposito/structural/bridge/Line.java)) - Concrete abstraction
+       - Represents a line shape with start and end points
+       - Delegates drawing to the DrawingAPI implementation
+     - **BridgeClient** ([BridgeClient.java](app/src/main/java/org/codeposito/structural/bridge/BridgeClient.java)) - Demo client
+       - Comprehensive demonstration of the bridge pattern
+       - Shows same shapes rendered with different APIs
+       - Demonstrates decoupling benefits
+     - **Comprehensive test coverage** ([BridgeTest.java](app/src/test/java/org/codeposito/structural/bridge/BridgeTest.java))
+       - Tests all bridge components and their interactions
+       - Validates decoupling and polymorphism
+       - Ensures proper delegation to implementations
+
+Key Features:
+- **Decoupling**: Abstraction and implementation are completely separated
+- **Extensibility**: New shapes and rendering APIs can be added independently
+- **Polymorphism**: Same shapes work with different rendering engines
+- **Flexibility**: Runtime selection of implementation
+- **Maintainability**: Changes to implementation don't affect abstraction
+- **Comprehensive Testing**: Full test coverage for all bridge components
+- **Real-world Example**: Practical drawing system with multiple rendering backends
+
+Usage Examples:
+```java
+// Create different rendering APIs
+DrawingAPI openGLAPI = new OpenGLDrawingAPI();
+DrawingAPI svgAPI = new SVGDrawingAPI();
+
+// Create same shape with different APIs
+Circle circleOpenGL = new Circle(10, 10, 20, openGLAPI);
+Circle circleSVG = new Circle(10, 10, 20, svgAPI);
+
+// Draw shapes - same shape, different rendering
+circleOpenGL.draw(); // Uses OpenGL rendering
+circleSVG.draw();    // Uses SVG rendering
+
+// Create different shapes with same API
+Shape[] shapes = {
+    new Circle(10, 20, 30, openGLAPI),
+    new Rectangle(10, 20, 30, 40, openGLAPI),
+    new Line(10, 20, 30, 40, openGLAPI)
+};
+
+// All shapes use the same rendering API
+for (Shape shape : shapes) {
+    shape.draw(); // All use OpenGL
+}
+```
+
+Benefits:
+- **Decoupling**: Abstraction and implementation can vary independently
+- **Extensibility**: Easy to add new shapes or rendering engines
+- **Runtime Flexibility**: Can switch implementations at runtime
+- **Reduced Complexity**: Avoids inheritance explosion
+- **Better Design**: Follows composition over inheritance principle
+- **Maintainability**: Changes are isolated to specific components
+
 ### Behavioral Patterns (Coming Soon)
 - Chain of Responsibility
 - Command Pattern
@@ -377,7 +467,8 @@ app/
 │   │               │   ├── builder/
 │   │               │   └── prototype/
 │   │               ├── structural/
-│   │               │   └── adapter/
+│   │               │   ├── adapter/
+│   │               │   └── bridge/
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
 │       └── java/
@@ -388,7 +479,8 @@ app/
 │                   │   ├── builder/
 │                   │   └── prototype/
 │                   ├── structural/
-│                   │   └── adapter/
+│                   │   ├── adapter/
+│                   │   └── bridge/
 │                   └── behavioral/     (Coming Soon)
 └── build.gradle.kts
 ```

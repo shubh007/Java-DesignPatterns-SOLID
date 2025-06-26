@@ -4,6 +4,7 @@
 package org.codeposito;
 
 import org.codeposito.structural.adapter.AdapterClient;
+import org.codeposito.structural.bridge.BridgeClient;
 
 public class App {
     public String getGreeting() {
@@ -11,12 +12,30 @@ public class App {
     }
 
     public static void main(String[] args) {
-        if (args.length > 0 && args[0].equals("adapter")) {
-            // Run the adapter pattern demo
-            AdapterClient.main(new String[]{});
+        if (args.length > 0) {
+            switch (args[0]) {
+                case "adapter":
+                    // Run the adapter pattern demo
+                    AdapterClient.main(new String[]{});
+                    break;
+                case "bridge":
+                    // Run the bridge pattern demo
+                    BridgeClient.main(new String[]{});
+                    break;
+                default:
+                    System.out.println("Unknown pattern: " + args[0]);
+                    printUsage();
+                    break;
+            }
         } else {
             System.out.println(new App().getGreeting());
-            System.out.println("To run adapter pattern demo, use: ./gradlew run --args='adapter'");
+            printUsage();
         }
+    }
+    
+    private static void printUsage() {
+        System.out.println("Available pattern demos:");
+        System.out.println("  ./gradlew run --args='adapter'  - Run adapter pattern demo");
+        System.out.println("  ./gradlew run --args='bridge'   - Run bridge pattern demo");
     }
 }
