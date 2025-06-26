@@ -113,10 +113,66 @@ Current implementations:
    - Lets subclasses decide which class to instantiate
    - Promotes loose coupling
 
-#### Builder Pattern (Coming Soon)
-- Classic Builder
-- Fluent Builder
-- Builder with Director
+#### Builder Pattern
+The Builder pattern constructs complex objects step by step, allowing you to produce different types and representations of an object using the same construction code.
+
+Current implementations:
+
+1. [Computer Builder](app/src/main/java/org/codeposito/creational/builder/)
+   - Classic Builder pattern with fluent interface
+   - Complex object construction with many optional parameters
+   - Validation logic for required fields
+   - Default values for optional fields
+   - Implementation includes:
+     - Complex Object ([Computer.java](app/src/main/java/org/codeposito/creational/builder/Computer.java)) with package-private constructor
+     - Separate Builder class ([ComputerBuilder.java](app/src/main/java/org/codeposito/creational/builder/ComputerBuilder.java)) with method chaining
+     - Director class ([ComputerDirector.java](app/src/main/java/org/codeposito/creational/builder/ComputerDirector.java)) for predefined configurations
+     - Client ([BuilderClient.java](app/src/main/java/org/codeposito/creational/builder/BuilderClient.java)) demonstrating various usage patterns
+     - Comprehensive test coverage ([BuilderTest.java](app/src/test/java/org/codeposito/creational/builder/BuilderTest.java))
+
+2. [Pizza Builder](app/src/main/java/org/codeposito/creational/builder/)
+   - Alternative Builder implementation with collections
+   - Demonstrates different approaches to the Builder pattern
+   - Flexible topping management with varargs support
+   - Implementation includes:
+     - Pizza class ([Pizza.java](app/src/main/java/org/codeposito/creational/builder/Pizza.java)) with List-based toppings
+     - Separate Builder class ([PizzaBuilder.java](app/src/main/java/org/codeposito/creational/builder/PizzaBuilder.java)) with addTopping() and addToppings() methods
+     - Client ([PizzaClient.java](app/src/main/java/org/codeposito/creational/builder/PizzaClient.java)) demonstrating various pizza configurations
+     - Validation for required fields (size, crust)
+
+Key Features:
+- **Fluent Interface**: Method chaining for readable code
+- **Validation**: Built-in validation for required parameters
+- **Default Values**: Automatic setting of sensible defaults
+- **Director Pattern**: Predefined configurations for common use cases
+- **Immutable Objects**: Objects are immutable after construction
+- **Type Safety**: Compile-time type checking
+- **Flexibility**: Support for optional parameters and collections
+- **Separate Files**: Each class is in its own file for better organization
+
+Usage Examples:
+```java
+// Direct Builder usage
+Computer computer = new ComputerBuilder()
+    .cpu("Intel Core i7")
+    .ram("16GB DDR4")
+    .storage("512GB SSD")
+    .gpu("RTX 3060")
+    .build();
+
+// Director usage for predefined configurations
+ComputerDirector director = new ComputerDirector();
+Computer gamingPC = director.buildGamingComputer();
+Computer officePC = director.buildOfficeComputer();
+
+// Pizza Builder with collections
+Pizza pizza = new PizzaBuilder()
+    .size("Large")
+    .crust("Thick")
+    .addToppings("Pepperoni", "Mushrooms", "Bell Peppers")
+    .extraCheese(true)
+    .build();
+```
 
 #### Prototype Pattern (Coming Soon)
 - Shallow Copy
@@ -154,7 +210,12 @@ app/
 │   │       └── org/
 │   │           └── codeposito/
 │   │               ├── creational/
-│   │               │   └── singleton/
+│   │               │   ├── singleton/
+│   │               │   ├── factory/
+│   │               │   │   ├── abstrct/
+│   │               │   │   ├── simple/
+│   │               │   │   └── regular/
+│   │               │   └── builder/
 │   │               ├── structural/     (Coming Soon)
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
@@ -162,7 +223,8 @@ app/
 │           └── org/
 │               └── codeposito/
 │                   ├── creational/
-│                   │   └── singleton/
+│                   │   ├── singleton/
+│                   │   └── builder/
 │                   ├── structural/     (Coming Soon)
 │                   └── behavioral/     (Coming Soon)
 └── build.gradle.kts
