@@ -3,6 +3,7 @@
  */
 package org.codeposito;
 
+import org.codeposito.behavioral.chainOfResponsibility.ChainOfResponsibilityClient;
 import org.codeposito.structural.adapter.AdapterClient;
 import org.codeposito.structural.bridge.BridgeClient;
 import org.codeposito.structural.composite.CompositeClient;
@@ -19,6 +20,10 @@ public class App {
     public static void main(String[] args) {
         if (args.length > 0) {
             switch (args[0]) {
+                case "chainOfResponsibility":
+                    // Run the chain of responsibility pattern demo
+                    ChainOfResponsibilityClient.main(new String[]{});
+                    break;
                 case "adapter":
                     // Run the adapter pattern demo
                     AdapterClient.main(new String[]{});
@@ -60,6 +65,7 @@ public class App {
     
     private static void printUsage() {
         System.out.println("Available pattern demos:");
+        System.out.println("  ./gradlew run --args='chainOfResponsibility' - Run chain of responsibility pattern demo");
         System.out.println("  ./gradlew run --args='adapter'   - Run adapter pattern demo");
         System.out.println("  ./gradlew run --args='bridge'    - Run bridge pattern demo");
         System.out.println("  ./gradlew run --args='composite' - Run composite pattern demo");

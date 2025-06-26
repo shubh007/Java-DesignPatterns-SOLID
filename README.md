@@ -938,8 +938,89 @@ Benefits:
 - **Flexibility**: Easy to add new shared states without affecting existing code
 - **Real-world Applicability**: Perfect for text editors, game engines, graphics systems, and any application with many similar objects
 
-### Behavioral Patterns (Coming Soon)
-- Chain of Responsibility
+### Behavioral Patterns
+
+Behavioral patterns focus on communication between objects, how objects interact and distribute responsibility.
+
+#### Chain of Responsibility Pattern
+The Chain of Responsibility pattern creates a chain of receiver objects for a request. Each receiver either handles the request or passes it to the next receiver in the chain. This pattern decouples the sender from the receiver and allows multiple objects to handle the request.
+
+Current implementations:
+
+1. [Customer Service Chain](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/)
+   - Demonstrates a customer service system where different types of requests are handled by specialized handlers
+   - Shows how requests flow through a chain until they find the appropriate handler
+   - Implementation includes:
+     - **Handler** ([Handler.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/Handler.java)) - Abstract base class
+       - Defines the interface for all handlers in the chain
+       - Implements the template method pattern for request handling
+       - Manages the next handler in the chain
+       - Provides default behavior for unhandled requests
+     - **Request** ([Request.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/Request.java)) - Request object
+       - Contains request type, description, and priority
+       - Immutable object with getter methods
+       - Supports toString() for debugging and logging
+     - **RequestType** ([RequestType.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/RequestType.java)) - Enum
+       - Defines different types of requests (LOGIN, PURCHASE, REFUND, COMPLAINT, TECHNICAL_SUPPORT, GENERAL_INQUIRY)
+       - Provides type safety for request handling
+     - **Concrete Handlers**:
+       - **LoginHandler** ([LoginHandler.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/LoginHandler.java)) - Handles authentication requests
+       - **PurchaseHandler** ([PurchaseHandler.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/PurchaseHandler.java)) - Handles purchase transactions
+       - **RefundHandler** ([RefundHandler.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/RefundHandler.java)) - Handles refund requests
+       - **ComplaintHandler** ([ComplaintHandler.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/ComplaintHandler.java)) - Handles customer complaints
+       - **TechnicalSupportHandler** ([TechnicalSupportHandler.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/TechnicalSupportHandler.java)) - Handles technical issues
+       - **GeneralInquiryHandler** ([GeneralInquiryHandler.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/GeneralInquiryHandler.java)) - Handles general inquiries
+     - **ChainOfResponsibilityClient** ([ChainOfResponsibilityClient.java](app/src/main/java/org/codeposito/behavioral/chainOfResponsibility/ChainOfResponsibilityClient.java)) - Demo client
+       - Comprehensive demonstration of the chain of responsibility pattern
+       - Shows chain setup and request processing
+       - Demonstrates how requests flow through the chain
+       - Tests various request types and error handling
+     - **Comprehensive test coverage** ([ChainOfResponsibilityTest.java](app/src/test/java/org/codeposito/behavioral/chainOfResponsibility/ChainOfResponsibilityTest.java))
+       - Tests all handler types and their capabilities
+       - Validates chain setup and request flow
+       - Ensures proper request type handling
+       - Tests request properties and enum values
+
+Key Features:
+- **Chain Setup**: Flexible chain configuration with method chaining
+- **Request Routing**: Automatic routing of requests to appropriate handlers
+- **Fallback Handling**: Graceful handling of unhandled requests
+- **Type Safety**: Enum-based request types prevent invalid requests
+- **Extensibility**: Easy to add new handlers without modifying existing code
+- **Decoupling**: Senders don't need to know about specific handlers
+- **Comprehensive Testing**: Full test coverage for all chain scenarios
+- **Real-world Example**: Practical customer service system implementation
+
+Usage Examples:
+```java
+// Create handlers
+Handler loginHandler = new LoginHandler();
+Handler purchaseHandler = new PurchaseHandler();
+Handler refundHandler = new RefundHandler();
+
+// Set up the chain
+loginHandler
+    .setNext(purchaseHandler)
+    .setNext(refundHandler);
+
+// Create requests
+Request loginRequest = new Request(RequestType.LOGIN, "User login", 1);
+Request purchaseRequest = new Request(RequestType.PURCHASE, "Product purchase", 2);
+
+// Process requests through the chain
+loginHandler.handle(loginRequest);    // Handled by LoginHandler
+loginHandler.handle(purchaseRequest); // Handled by PurchaseHandler
+```
+
+Benefits:
+- **Loose Coupling**: Senders don't need to know which handler will process their request
+- **Single Responsibility**: Each handler has a specific responsibility
+- **Open/Closed Principle**: Easy to add new handlers without modifying existing code
+- **Flexible Chain**: Chain can be dynamically configured at runtime
+- **Error Handling**: Graceful handling of unhandled requests
+- **Maintainability**: Clear separation of concerns makes code easier to maintain
+- **Scalability**: Easy to add new request types and handlers
+
 - Command Pattern
 - Iterator Pattern
 - Mediator Pattern
@@ -975,7 +1056,8 @@ app/
 │   │               │   ├── facade/
 │   │               │   ├── flyweight/
 │   │               │   └── proxy/
-│   │               └── behavioral/     (Coming Soon)
+│   │               └── behavioral/
+│   │                   └── chainOfResponsibility/
 │   └── test/
 │       └── java/
 │           └── org/
@@ -992,7 +1074,8 @@ app/
 │                   │   ├── facade/
 │                   │   ├── flyweight/
 │                   │   └── proxy/
-│                   └── behavioral/     (Coming Soon)
+│                   └── behavioral/
+│                       └── chainOfResponsibility/
 └── build.gradle.kts
 ```
 
