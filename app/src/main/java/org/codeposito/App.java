@@ -8,6 +8,7 @@ import org.codeposito.structural.bridge.BridgeClient;
 import org.codeposito.structural.composite.CompositeClient;
 import org.codeposito.structural.decorator.DecoratorClient;
 import org.codeposito.structural.facade.FacadeClient;
+import org.codeposito.structural.flyweight.FlyweightClient;
 
 public class App {
     public String getGreeting() {
@@ -37,6 +38,10 @@ public class App {
                     // Run the facade pattern demo
                     FacadeClient.main(new String[]{});
                     break;
+                case "flyweight":
+                    // Run the flyweight pattern demo
+                    FlyweightClient.main(new String[]{});
+                    break;
                 default:
                     System.out.println("Unknown pattern: " + args[0]);
                     printUsage();
@@ -55,5 +60,6 @@ public class App {
         System.out.println("  ./gradlew run --args='composite' - Run composite pattern demo");
         System.out.println("  ./gradlew run --args='decorator' - Run decorator pattern demo");
         System.out.println("  ./gradlew run --args='facade'    - Run facade pattern demo");
+        System.out.println("  ./gradlew run --args='flyweight' - Run flyweight pattern demo");
     }
 }

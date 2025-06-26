@@ -757,6 +757,90 @@ Benefits:
 - **Error Isolation**: Errors in subsystems are contained and handled gracefully
 - **Real-world Applicability**: Perfect for complex systems like home automation, banking systems, and enterprise applications
 
+#### Flyweight Pattern
+The Flyweight pattern reduces memory usage by sharing common parts of state between multiple objects instead of keeping all of the data in each object. It's useful when you need to create a large number of similar objects that share common state.
+
+Current implementations:
+
+1. [Text Editor Flyweight](app/src/main/java/org/codeposito/structural/flyweight/)
+   - Demonstrates memory-efficient character management in a text editor
+   - Shows how to share character objects with identical properties
+   - Implementation includes:
+     - **Character** ([Character.java](app/src/main/java/org/codeposito/structural/flyweight/Character.java)) - The "Flyweight" class
+       - Contains intrinsic state (shared state): character value, font, size, color
+       - Immutable objects that can be safely shared
+       - Proper equals() and hashCode() implementation for caching
+     - **CharacterContext** ([CharacterContext.java](app/src/main/java/org/codeposito/structural/flyweight/CharacterContext.java)) - The "Context" class
+       - Contains extrinsic state (unique state): row, column position
+       - References a shared Character object
+       - Provides display functionality for the character at its position
+     - **CharacterFactory** ([CharacterFactory.java](app/src/main/java/org/codeposito/structural/flyweight/CharacterFactory.java)) - The "Flyweight Factory"
+       - Manages and caches Character objects
+       - Ensures identical characters are reused rather than created
+       - Provides statistics on memory savings
+       - Includes cache management and clearing functionality
+     - **TextEditor** ([TextEditor.java](app/src/main/java/org/codeposito/structural/flyweight/TextEditor.java)) - The "Client" class
+       - Manages a collection of CharacterContext objects
+       - Uses the flyweight factory to create/reuse characters
+       - Provides text display and management functionality
+       - Demonstrates memory efficiency through character reuse
+     - **FlyweightClient** ([FlyweightClient.java](app/src/main/java/org/codeposito/structural/flyweight/FlyweightClient.java)) - Demo client
+       - Comprehensive demonstration of the flyweight pattern
+       - Shows memory efficiency with repeated characters
+       - Demonstrates different character styles and their reuse
+       - Analyzes memory savings and cache statistics
+     - **Comprehensive test coverage** ([FlyweightTest.java](app/src/test/java/org/codeposito/structural/flyweight/FlyweightTest.java))
+       - Tests all flyweight components and their interactions
+       - Validates character reuse and memory efficiency
+       - Ensures proper caching and factory functionality
+       - Tests bounds checking and error scenarios
+
+Key Features:
+- **Memory Efficiency**: Identical characters are shared rather than duplicated
+- **Intrinsic State**: Character properties (value, font, size, color) are shared
+- **Extrinsic State**: Position information (row, column) is unique per context
+- **Factory Pattern**: Centralized character creation and caching
+- **Statistics Tracking**: Real-time monitoring of memory savings
+- **Cache Management**: Ability to clear cache and reset statistics
+- **Comprehensive Testing**: Full test coverage for all flyweight scenarios
+- **Real-world Example**: Practical text editor with efficient character management
+
+Usage Examples:
+```java
+// Create a text editor
+TextEditor editor = new TextEditor(10, 50);
+
+// Add characters (identical ones will be reused)
+editor.addCharacter(0, 0, 'H', "Arial", 16, "blue");
+editor.addCharacter(0, 1, 'e', "Arial", 16, "blue");
+editor.addCharacter(0, 2, 'l', "Arial", 16, "blue");
+editor.addCharacter(0, 3, 'l', "Arial", 16, "blue"); // Reused from position (0,2)
+editor.addCharacter(0, 4, 'o', "Arial", 16, "blue");
+
+// Add the same character at different positions
+editor.addCharacter(1, 0, 'H', "Arial", 16, "blue"); // Reused from position (0,0)
+editor.addCharacter(1, 1, 'i', "Arial", 16, "blue");
+
+// Display the text
+editor.displayText();
+
+// Check memory efficiency
+CharacterFactory.printStatistics();
+// Output shows:
+// - Total characters created: 5 (unique characters)
+// - Total characters reused: 2 (shared instances)
+// - Memory saved: 28.6% (2 reused out of 7 total requests)
+```
+
+Benefits:
+- **Memory Reduction**: Significantly reduces memory usage when many objects share common state
+- **Performance Improvement**: Faster object creation through caching
+- **Scalability**: Efficiently handles large numbers of similar objects
+- **Resource Management**: Better utilization of system resources
+- **Maintainability**: Centralized state management through factory
+- **Flexibility**: Easy to add new shared states without affecting existing code
+- **Real-world Applicability**: Perfect for text editors, game engines, graphics systems, and any application with many similar objects
+
 ### Behavioral Patterns (Coming Soon)
 - Chain of Responsibility
 - Command Pattern
@@ -791,7 +875,8 @@ app/
 │   │               │   ├── bridge/
 │   │               │   ├── composite/
 │   │               │   ├── decorator/
-│   │               │   └── facade/
+│   │               │   ├── facade/
+│   │               │   └── flyweight/
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
 │       └── java/
