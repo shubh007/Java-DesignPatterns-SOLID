@@ -174,10 +174,91 @@ Pizza pizza = new PizzaBuilder()
     .build();
 ```
 
-#### Prototype Pattern (Coming Soon)
-- Shallow Copy
-- Deep Copy
-- Cloneable Interface
+#### Prototype Pattern
+The Prototype pattern creates new objects by cloning an existing object, known as the prototype, instead of creating new instances from scratch. This pattern is useful when object creation is expensive or when you want to avoid building a class hierarchy of factories.
+
+Current implementations:
+
+1. [Document Prototype](app/src/main/java/org/codeposito/creational/prototype/)
+   - Demonstrates shallow copy vs deep copy cloning
+   - Complex object with nested metadata
+   - Implementation includes:
+     - Document class ([Document.java](app/src/main/java/org/codeposito/creational/prototype/Document.java)) with Cloneable interface
+     - DocumentMetadata class ([DocumentMetadata.java](app/src/main/java/org/codeposito/creational/prototype/DocumentMetadata.java)) for nested object cloning
+     - Shallow copy using `clone()` method
+     - Deep copy using `deepClone()` method
+     - Comprehensive test coverage ([PrototypeTest.java](app/src/test/java/org/codeposito/creational/prototype/PrototypeTest.java))
+
+2. [Shape Prototype Hierarchy](app/src/main/java/org/codeposito/creational/prototype/)
+   - Demonstrates prototype pattern with inheritance
+   - Polymorphic cloning with abstract base class
+   - Implementation includes:
+     - Abstract Shape class ([Shape.java](app/src/main/java/org/codeposito/creational/prototype/Shape.java)) with Cloneable interface
+     - Concrete Circle class ([Circle.java](app/src/main/java/org/codeposito/creational/prototype/Circle.java)) with radius property
+     - Concrete Rectangle class ([Rectangle.java](app/src/main/java/org/codeposito/creational/prototype/Rectangle.java)) with width and height properties
+     - Polymorphic cloning support
+     - Area calculation and drawing methods
+
+3. [Shape Registry Pattern](app/src/main/java/org/codeposito/creational/prototype/)
+   - Demonstrates prototype registry pattern
+   - Centralized prototype management
+   - Implementation includes:
+     - ShapeRegistry class ([ShapeRegistry.java](app/src/main/java/org/codeposito/creational/prototype/ShapeRegistry.java)) for managing prototypes
+     - Pre-registered default shapes
+     - Dynamic shape registration and retrieval
+     - Error handling for invalid keys
+     - Registry size management
+
+4. [Prototype Client](app/src/main/java/org/codeposito/creational/prototype/)
+   - Comprehensive demonstration of all prototype features
+   - Implementation includes:
+     - PrototypeClient class ([PrototypeClient.java](app/src/main/java/org/codeposito/creational/prototype/PrototypeClient.java)) with main method
+     - Document cloning demonstration (shallow vs deep copy)
+     - Shape cloning demonstration with inheritance
+     - Shape registry pattern demonstration
+     - Detailed output showing cloning behavior
+
+Key Features:
+- **Cloneable Interface**: Proper implementation of Java's Cloneable interface
+- **Shallow Copy**: Basic cloning with shared references to nested objects
+- **Deep Copy**: Complete object independence with cloned nested objects
+- **Inheritance Support**: Polymorphic cloning with abstract base classes
+- **Registry Pattern**: Centralized prototype management with key-based access
+- **Type Safety**: Proper type casting and error handling
+- **Comprehensive Testing**: Full test coverage for all cloning scenarios
+- **Real-world Examples**: Practical implementations with Document and Shape hierarchies
+
+Usage Examples:
+```java
+// Document cloning (shallow copy)
+Document original = new Document("Original", "Content");
+Document shallowCopy = original.clone();
+
+// Document cloning (deep copy)
+Document deepCopy = original.deepClone();
+
+// Shape cloning with inheritance
+Circle originalCircle = new Circle("red", 10, 20, 15.0);
+Circle clonedCircle = originalCircle.clone();
+
+// Polymorphic cloning
+Shape[] shapes = {originalCircle, new Rectangle("blue", 30, 40, 25.0, 15.0)};
+for (Shape shape : shapes) {
+    Shape cloned = shape.clone();
+    cloned.setColor("purple");
+}
+
+// Registry pattern usage
+Circle redCircle = (Circle) ShapeRegistry.getShape("red-circle");
+ShapeRegistry.registerShape("custom-circle", new Circle("orange", 0, 0, 25.0));
+```
+
+Benefits:
+- **Performance**: Avoids expensive object creation by cloning existing instances
+- **Flexibility**: Allows runtime object creation without knowing concrete classes
+- **Reduced Subclassing**: Eliminates the need for factory classes
+- **Dynamic Configuration**: Registry pattern allows runtime prototype management
+- **Memory Efficiency**: Reuses existing objects as templates
 
 ### Structural Patterns (Coming Soon)
 - Adapter Pattern
@@ -215,7 +296,8 @@ app/
 │   │               │   │   ├── abstrct/
 │   │               │   │   ├── simple/
 │   │               │   │   └── regular/
-│   │               │   └── builder/
+│   │               │   ├── builder/
+│   │               │   └── prototype/
 │   │               ├── structural/     (Coming Soon)
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
@@ -224,7 +306,8 @@ app/
 │               └── codeposito/
 │                   ├── creational/
 │                   │   ├── singleton/
-│                   │   └── builder/
+│                   │   ├── builder/
+│                   │   └── prototype/
 │                   ├── structural/     (Coming Soon)
 │                   └── behavioral/     (Coming Soon)
 └── build.gradle.kts
