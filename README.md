@@ -35,6 +35,19 @@ cd Java-DesignPatterns-SOLID
 open app/build/reports/tests/test/index.html
 ```
 
+### Running Pattern Demos
+
+```bash
+# Run adapter pattern demo
+./gradlew run --args="adapter"
+
+# Run other pattern demos (when implemented)
+./gradlew run --args="singleton"
+./gradlew run --args="factory"
+./gradlew run --args="builder"
+./gradlew run --args="prototype"
+```
+
 ## Design Patterns Implementation
 
 ### Creational Patterns
@@ -260,14 +273,79 @@ Benefits:
 - **Dynamic Configuration**: Registry pattern allows runtime prototype management
 - **Memory Efficiency**: Reuses existing objects as templates
 
-### Structural Patterns (Coming Soon)
-- Adapter Pattern
-- Bridge Pattern
-- Composite Pattern
-- Decorator Pattern
-- Facade Pattern
-- Flyweight Pattern
-- Proxy Pattern
+### Structural Patterns
+
+Structural patterns deal with object composition and relationships between entities, making it easier to create relationships between objects.
+
+#### Adapter Pattern
+The Adapter pattern allows incompatible interfaces to work together by wrapping an existing class with a new interface. It acts as a bridge between two incompatible interfaces.
+
+Current implementations:
+
+1. [Payment System Adapter](app/src/main/java/org/codeposito/structural/adapter/)
+   - Demonstrates adapting a legacy payment system to work with modern payment interfaces
+   - Shows how to bridge incompatible payment processing systems
+   - Implementation includes:
+     - **LegacyPaymentSystem** ([LegacyPaymentSystem.java](app/src/main/java/org/codeposito/structural/adapter/LegacyPaymentSystem.java)) - The "Adaptee" class with old interface
+       - Uses legacy format: account numbers with "ACC" prefix, amounts in cents, currency codes with "001" suffix
+       - Returns legacy result objects with status codes and messages
+       - Simulates processing delays and validation logic
+     - **ModernPaymentProcessor** ([ModernPaymentProcessor.java](app/src/main/java/org/codeposito/structural/adapter/ModernPaymentProcessor.java)) - The "Target" interface
+       - Modern interface using BigDecimal for amounts, simple account IDs, standard currency codes
+       - Includes nested classes for PaymentRequest, PaymentResponse, and AccountBalance
+       - Provides clean, modern API for payment processing
+     - **LegacyPaymentAdapter** ([LegacyPaymentAdapter.java](app/src/main/java/org/codeposito/structural/adapter/LegacyPaymentAdapter.java)) - The "Adapter" class
+       - Implements ModernPaymentProcessor interface
+       - Wraps LegacyPaymentSystem and converts between formats
+       - Handles data transformation (account numbers, amounts, currencies)
+       - Generates modern transaction IDs and timestamps
+     - **ModernPaymentService** ([ModernPaymentService.java](app/src/main/java/org/codeposito/structural/adapter/ModernPaymentService.java)) - The "Client" class
+       - Uses the modern interface without knowing about legacy system
+       - Demonstrates how clients can work with clean, modern APIs
+       - Includes error handling and availability checks
+     - **AdapterClient** ([AdapterClient.java](app/src/main/java/org/codeposito/structural/adapter/AdapterClient.java)) - Demo client
+       - Comprehensive demonstration of the adapter pattern
+       - Shows both legacy and modern interfaces working together
+       - Tests various payment scenarios and error handling
+     - **Comprehensive test coverage** ([AdapterTest.java](app/src/test/java/org/codeposito/structural/adapter/AdapterTest.java))
+       - Tests all adapter functionality including format conversions
+       - Validates error handling and edge cases
+       - Ensures proper data transformation between interfaces
+
+Key Features:
+- **Format Conversion**: Automatic conversion between legacy and modern data formats
+- **Interface Compatibility**: Seamless integration of incompatible systems
+- **Data Transformation**: Account numbers, amounts, currencies, and response formats
+- **Error Handling**: Proper error propagation between systems
+- **Transaction Management**: Modern transaction IDs and timestamps
+- **Comprehensive Testing**: Full test coverage for all conversion scenarios
+- **Real-world Example**: Practical payment system integration scenario
+
+Usage Examples:
+```java
+// Create the legacy system and adapter
+LegacyPaymentSystem legacySystem = new LegacyPaymentSystem();
+ModernPaymentProcessor adapter = new LegacyPaymentAdapter(legacySystem);
+
+// Use the modern interface through the adapter
+ModernPaymentService paymentService = new ModernPaymentService(adapter);
+
+// Process payments using modern interface
+PaymentResponse response = paymentService.makePayment("1234", new BigDecimal("15.00"), "USD", "Coffee");
+AccountBalance balance = paymentService.getBalance("1234");
+
+// The adapter handles all the conversion internally:
+// - "1234" → "ACC000001234" (account number conversion)
+// - 15.00 → 1500 (amount conversion from dollars to cents)
+// - "USD" → "USD001" (currency code conversion)
+```
+
+Benefits:
+- **Legacy Integration**: Allows modern systems to work with existing legacy code
+- **Interface Standardization**: Provides consistent interfaces across different systems
+- **Minimal Changes**: Requires no changes to existing legacy code
+- **Gradual Migration**: Enables incremental system modernization
+- **Code Reuse**: Leverages existing functionality without rewriting
 
 ### Behavioral Patterns (Coming Soon)
 - Chain of Responsibility
@@ -298,7 +376,8 @@ app/
 │   │               │   │   └── regular/
 │   │               │   ├── builder/
 │   │               │   └── prototype/
-│   │               ├── structural/     (Coming Soon)
+│   │               ├── structural/
+│   │               │   └── adapter/
 │   │               └── behavioral/     (Coming Soon)
 │   └── test/
 │       └── java/
@@ -308,7 +387,8 @@ app/
 │                   │   ├── singleton/
 │                   │   ├── builder/
 │                   │   └── prototype/
-│                   ├── structural/     (Coming Soon)
+│                   ├── structural/
+│                   │   └── adapter/
 │                   └── behavioral/     (Coming Soon)
 └── build.gradle.kts
 ```

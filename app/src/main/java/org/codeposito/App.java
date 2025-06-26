@@ -3,12 +3,20 @@
  */
 package org.codeposito;
 
+import org.codeposito.structural.adapter.AdapterClient;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        if (args.length > 0 && args[0].equals("adapter")) {
+            // Run the adapter pattern demo
+            AdapterClient.main(new String[]{});
+        } else {
+            System.out.println(new App().getGreeting());
+            System.out.println("To run adapter pattern demo, use: ./gradlew run --args='adapter'");
+        }
     }
 }
