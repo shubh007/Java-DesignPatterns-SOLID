@@ -1,4 +1,4 @@
-package org.codeposito.structural.proxy;
+package org.codeposito.structural.proxy.virtual;
 
 /**
  * Image - The Subject interface in the Proxy pattern

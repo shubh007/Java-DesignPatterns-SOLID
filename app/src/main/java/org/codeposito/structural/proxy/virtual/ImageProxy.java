@@ -1,4 +1,4 @@
-package org.codeposito.structural.proxy;
+package org.codeposito.structural.proxy.virtual;
 
 /**
  * ImageProxy - The Proxy in the Proxy pattern

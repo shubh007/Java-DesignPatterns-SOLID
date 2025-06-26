@@ -9,7 +9,7 @@ import org.codeposito.structural.composite.CompositeClient;
 import org.codeposito.structural.decorator.DecoratorClient;
 import org.codeposito.structural.facade.FacadeClient;
 import org.codeposito.structural.flyweight.FlyweightClient;
-import org.codeposito.structural.proxy.ProxyClient;
+import org.codeposito.structural.proxy.virtual.ProxyClient;
 
 public class App {
     public String getGreeting() {

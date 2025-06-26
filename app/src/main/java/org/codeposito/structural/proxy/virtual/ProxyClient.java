@@ -1,4 +1,4 @@
-package org.codeposito.structural.proxy;
+package org.codeposito.structural.proxy.virtual;
 
 /**
  * Proxy Client - demonstrates the Proxy pattern in action

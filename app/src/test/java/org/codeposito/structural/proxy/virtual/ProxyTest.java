@@ -1,4 +1,4 @@
-package org.codeposito.structural.proxy;
+package org.codeposito.structural.proxy.virtual;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

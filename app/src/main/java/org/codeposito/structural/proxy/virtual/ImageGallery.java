@@ -1,4 +1,4 @@
-package org.codeposito.structural.proxy;
+package org.codeposito.structural.proxy.virtual;
 
 import java.util.ArrayList;
 import java.util.List;

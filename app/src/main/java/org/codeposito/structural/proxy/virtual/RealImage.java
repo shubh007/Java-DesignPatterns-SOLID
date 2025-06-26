@@ -1,4 +1,4 @@
-package org.codeposito.structural.proxy;
+package org.codeposito.structural.proxy.virtual;
 
 /**
  * RealImage - The RealSubject in the Proxy pattern
